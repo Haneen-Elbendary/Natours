@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema(
       validate: [validator.isEmail, 'Please provide a valid email']
     },
     photo: String,
+    role: {
+      type: String,
+      enum: ['user', 'admin', 'guide', 'lead-guide'],
+      default: 'user'
+    },
     password: {
       type: String,
       required: [true, 'Please provide a password'],
@@ -39,25 +44,26 @@ const userSchema = new mongoose.Schema(
         message: 'Passwords are not the same!'
       }
     },
-    passwordChangedAt: {
-      type: Date,
-      set: function(value) {
-        // Regular expression to match YY-DD-MM
-        const regex = /^\d{2}-\d{2}-\d{2}$/;
-        if (!regex.test(value)) {
-          throw new Error('Please Enter Valid Date Format YY-DD-MM');
-        }
+    passwordChangedAt: Date
+    // {
+    //   type: Date,
+    //   set: function(value) {
+    //     // Regular expression to match YY-DD-MM
+    //     const regex = /^\d{2}-\d{2}-\d{2}$/;
+    //     if (!regex.test(value)) {
+    //       throw new Error('Please Enter Valid Date Format YY-DD-MM');
+    //     }
 
-        // Parse the input date
-        const [year, day, month] = value.split('-').map(Number);
+    //     // Parse the input date
+    //     const [year, day, month] = value.split('-').map(Number);
 
-        // Convert `YY` to a full year (assuming 20th century if YY < 70)
-        const fullYear = year < 70 ? 2000 + year : 1900 + year;
+    //     // Convert `YY` to a full year (assuming 20th century if YY < 70)
+    //     const fullYear = year < 70 ? 2000 + year : 1900 + year;
 
-        // Return a Date object
-        return new Date(fullYear, month - 1, day);
-      }
-    }
+    //     // Return a Date object
+    //     return new Date(fullYear, month - 1, day);
+    //   }
+    // }
   },
   { timestamps: true }
 );

@@ -46,6 +46,12 @@ const sendErrorProd = (err, res) => {
     });
   }
 };
+// handle JWT errors
+const handleJWTError = () =>
+  new AppError('Invalid token. Please log in again!', 401);
+// we will test it again after changing the JWT expiration time! -> and i fixed it 😍
+const handleTokenExpiredError = () =>
+  new AppError('Your token has expired! Please log in again.', 401);
 module.exports = (err, req, res, next) => {
   // console.log('i am in global error handler');
   err.statusCode = err.statusCode || 500;
@@ -64,7 +70,12 @@ module.exports = (err, req, res, next) => {
     if (error.name === 'ValidationError') {
       error = handelValidationErrorDB(error);
     }
-
+    if (error.name === 'JsonWebTokenError') {
+      error = handleJWTError();
+    }
+    if (error.name === 'TokenExpiredError') {
+      error = handleTokenExpiredError();
+    }
     sendErrorProd(error, res);
   }
 };

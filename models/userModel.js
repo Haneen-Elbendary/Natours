@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-
+const crypto = require('crypto');
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -44,7 +44,9 @@ const userSchema = new mongoose.Schema(
         message: 'Passwords are not the same!'
       }
     },
-    passwordChangedAt: Date
+    passwordChangedAt: Date,
+    passwordRestToken: String,
+    passwordRestExpires: Date
     // {
     //   type: Date,
     //   set: function(value) {
@@ -96,6 +98,21 @@ userSchema.methods.passwordChangedAfter = function(JWTTimestamp) {
   }
   // false means -> does'nt changed
   return false;
+};
+userSchema.methods.createPasswordRestToken = function() {
+  // generate token base16
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  // encrypt it and assign it to its property
+  this.passwordRestToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  console.log({ resetToken }, this.passwordRestToken);
+  // assign value to passwordRestExpire -> 10 mins before expiration
+  this.passwordRestExpires = Date.now() + 10 * 60 * 1000;
+
+  // return the plan restToken
+  return resetToken;
 };
 // we must create all needed methods first then create the model
 // create the user model

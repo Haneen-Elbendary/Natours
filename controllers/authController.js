@@ -95,3 +95,18 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+// forgot and reset password
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) get the user's email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('this email is not exist!', 404));
+  }
+  // 2)generate random token -> will make it as instant method on the user schema  -> bcz its related to the user data itself
+  const resetToken = user.createPasswordRestToken();
+  // save the updates
+  await user.save({ validateBeforeSave: false });
+  // 3)send it back as email
+});
+exports.resetPassword = catchAsync(async (req, res, next) => {});

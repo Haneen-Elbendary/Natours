@@ -10,6 +10,12 @@ router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
 // recieve resetToken & the newPassword
 router.patch('/resetPassword/:token', authController.resetPassword);
+router.patch(
+  '/updateMyPassword',
+  //  authController.protect check the token and add the user obj to the req
+  authController.protect,
+  authController.updatePassword
+);
 
 router
   .route('/')

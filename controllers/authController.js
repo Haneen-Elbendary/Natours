@@ -11,6 +11,13 @@ const signToken = id => {
     expiresIn: process.env.JWT_EXPIRES_IN
   });
 };
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+  res.status(statusCode).json({
+    status: 'success',
+    token
+  });
+};
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   // 1) check if email && password exist
@@ -23,12 +30,8 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401)); //400 -> unauthorized
   }
-  const token = signToken(user._id);
   // 3) if everything is ok
-  res.status(200).json({
-    status: 'success',
-    token
-  });
+  createSendToken(user, 200, res);
 });
 exports.signup = catchAsync(async (req, res, next) => {
   // we must specify which data we want to assign to the new user from the request body bcz if we don't specify that any one can create a user with any wanted role.& same for other stuff
@@ -42,12 +45,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     role: req.body.role
   });
   // create token and pass it to the client  after the user signUp to make auto signIn
-  const token = signToken(newUser._id);
-  res.status(201).json({
-    status: 'success',
-    token,
-    user: newUser
-  });
+  createSendToken(newUser, 201, res);
 });
 exports.protect = catchAsync(async (req, res, next) => {
   // 1)check if there's a token & get it if it's exist
@@ -157,9 +155,23 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
   // 3) update the passwordChangedAt property -> in the pre middleware -> in user model
   // 4)Log the user in , send JWT
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    token
-  });
+  createSendToken(user, 200, res);
+});
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // Available for logged users only
+  // 1- get the user from collection
+  //  we didn't use findByIdAndUpdate because it will turn off the validators
+  // anything related to password we don't use update
+  // +password to add the password to the returned user from the DB bcz we made the password  doesn't return by default in the schema
+  const user = await User.findById(req.user.id).select('+password');
+  // 2- check if the POSTed current password is correct
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Password is NOT correct!', 401));
+  }
+  // 3- if so,update the password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // 4-log the user in , send JWT
+  createSendToken(user, 200, res);
 });

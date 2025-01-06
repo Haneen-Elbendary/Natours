@@ -30,7 +30,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       )
     );
   }
-  // 2- filter the body from un wanted fields ->ex: prevent changing the role 
+  // 2- filter the body from un wanted fields ->ex: prevent changing the role
   const filteredObj = filterObj(req.body, 'name', 'email');
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredObj, {
     new: true,
@@ -42,6 +42,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     data: {
       user: updatedUser
     }
+  });
+});
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+  res.status(204).json({
+    status: 'success',
+    data: null
   });
 });
 exports.getUser = (req, res) => {

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const { type } = require('os');
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -46,7 +47,12 @@ const userSchema = new mongoose.Schema(
     },
     passwordChangedAt: Date,
     passwordRestToken: String,
-    passwordRestExpires: Date
+    passwordRestExpires: Date,
+    active: {
+      type: Boolean,
+      default: true,
+      select: false
+    }
     // {
     //   type: Date,
     //   set: function(value) {
@@ -85,6 +91,12 @@ userSchema.pre('save', function(next) {
     return next();
   }
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+userSchema.pre(/^find/, function(next) {
+  // /^find/ : look for string that start with find
+  // this point to the current query
+  this.find({ active: { $ne: false } });
   next();
 });
 // create instanceMethod to make it available for the entire User collection

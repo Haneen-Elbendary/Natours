@@ -13,9 +13,22 @@ const signToken = id => {
 };
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+  const cookiepOtions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true //ensure cookie can't be accessed || modified in any way by the browser
+  };
+  if (process.env.NODE_ENV === 'production ') cookiepOtions.secure = true; //to work only with https
+  res.cookie('jwt', token, cookiepOtions);
+  // remove password from output
+  user.password = undefined;
   res.status(statusCode).json({
     status: 'success',
-    token
+    token,
+    data: {
+      user
+    }
   });
 };
 exports.login = catchAsync(async (req, res, next) => {

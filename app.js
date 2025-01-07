@@ -3,7 +3,11 @@ const express = require('express');
 // my modules
 const app = express();
 const morgan = require('morgan');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const rateLimit = require('express-rate-limit');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const helmet = require('helmet');
+
 // import error class
 const AppError = require('./utils/appError');
 // import the error controller||handler
@@ -16,9 +20,13 @@ const UserRouter = require('./routes/userRoute');
 app.use(express.static(`${__dirname}/public`));
 // GLOBAL ->  middlewares
 // 3-rd party middleware from npm
+// secure Express app by setting http response headers
+app.use(helmet());
+// development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+// limit the number of request from the same ip to the same route
 const limitter = rateLimit({
   max: 100,
   windowMS: 60 * 60 * 1000,
@@ -26,13 +34,14 @@ const limitter = rateLimit({
 });
 // apply this middleware to all Routes
 app.use('/api', limitter);
-// this middleware to add body data to the request obj
-app.use(express.json());
+// body parser -> this middleware to parse body data and add it to  the request body
+app.use(express.json({ limit: '10kb' }));
 // create global middlewares -> be careful about middleware order in your code
 // app.use((req, res, next) => {
 //   console.log('hello from the global middleware');
 //   next();
 // });
+// testing middleware -> ex:helps id we want to see the headers
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();

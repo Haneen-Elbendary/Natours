@@ -3,6 +3,7 @@ const express = require('express');
 // my modules
 const app = express();
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 // import error class
 const AppError = require('./utils/appError');
 // import the error controller||handler
@@ -13,11 +14,18 @@ const UserRouter = require('./routes/userRoute');
 // const exp = require('constants');
 // built-in middleware in express to serve static files
 app.use(express.static(`${__dirname}/public`));
-//  middlewares
+// GLOBAL ->  middlewares
 // 3-rd party middleware from npm
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+const limitter = rateLimit({
+  max: 100,
+  windowMS: 60 * 60 * 1000,
+  message: 'Too many requests from this IP ,please try again in an hour!'
+});
+// apply this middleware to all Routes
+app.use('/api', limitter);
 // this middleware to add body data to the request obj
 app.use(express.json());
 // create global middlewares -> be careful about middleware order in your code

@@ -7,7 +7,12 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const helmet = require('helmet');
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+const sanitizeMongo = require('express-mongo-sanitize');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const xss = require('xss-clean');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const hpp = require('hpp');
 // import error class
 const AppError = require('./utils/appError');
 // import the error controller||handler
@@ -36,6 +41,24 @@ const limitter = rateLimit({
 app.use('/api', limitter);
 // body parser -> this middleware to parse body data and add it to  the request body
 app.use(express.json({ limit: '10kb' }));
+// data sanitization against NOSQL query injection
+app.use(sanitizeMongo());
+// data sanitization against XSS
+app.use(xss());
+// prevent parameter pollution
+app.use(
+  hpp({
+    // allow these parameters to be duplicated & prevent other parameters
+    whitelist: [
+      'price',
+      'difficulty',
+      'maxGroupSize',
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage'
+    ]
+  })
+);
 // create global middlewares -> be careful about middleware order in your code
 // app.use((req, res, next) => {
 //   console.log('hello from the global middleware');

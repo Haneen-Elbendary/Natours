@@ -112,7 +112,8 @@ const tourSchema = new mongoose.Schema(
         description: String,
         day: Number
       }
-    ]
+    ],
+    guides: Array
   },
   {
     toJSON: { virtuals: true },
@@ -127,6 +128,8 @@ tourSchema.pre('save', function(next) {
   this.slug = slugify(this.name);
   next();
 });
+// replace the user IDs in the new created tour with the actual users documents -> embedding
+tour
 tourSchema.post('save', function(doc, next) {
   console.log(doc);
   next();

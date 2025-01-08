@@ -4,6 +4,7 @@ const validator = require('validator');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const slugify = require('slugify');
+const User = require('./userModel');
 // define a schema with setting schema type options
 const tourSchema = new mongoose.Schema(
   {
@@ -129,7 +130,11 @@ tourSchema.pre('save', function(next) {
   next();
 });
 // replace the user IDs in the new created tour with the actual users documents -> embedding
-tour
+tourSchema.pre('save', async function(next) {
+  const guidesPromises = this.guides.map(async id => await User.findById(id));
+  this.guides = await Promise.all(guidesPromises);
+  next();
+});
 tourSchema.post('save', function(doc, next) {
   console.log(doc);
   next();

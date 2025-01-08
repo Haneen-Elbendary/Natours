@@ -19,6 +19,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/globalErrorHandler');
 const tourRouter = require('./routes/toursRoute');
 const UserRouter = require('./routes/userRoute');
+const ReviewRouter = require('./routes/reviewsRoute');
 // 3-rd party modules
 // const exp = require('constants');
 // built-in middleware in express to serve static files
@@ -86,6 +87,7 @@ app.use((req, res, next) => {
 // use the routers as a middle ware
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', UserRouter);
+app.use('/api/v1/reviews', ReviewRouter);
 // add a middleware to handle all of not handled routes
 // at the end of (middleware stack)
 app.all('*', (req, res, next) => {

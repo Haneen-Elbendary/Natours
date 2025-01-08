@@ -4,7 +4,7 @@ const validator = require('validator');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const slugify = require('slugify');
-const User = require('./userModel');
+// const User = require('./userModel');
 // define a schema with setting schema type options
 const tourSchema = new mongoose.Schema(
   {
@@ -114,7 +114,12 @@ const tourSchema = new mongoose.Schema(
         day: Number
       }
     ],
-    guides: Array
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
   {
     toJSON: { virtuals: true },
@@ -130,19 +135,28 @@ tourSchema.pre('save', function(next) {
   next();
 });
 // replace the user IDs in the new created tour with the actual users documents -> embedding
-tourSchema.pre('save', async function(next) {
-  const guidesPromises = this.guides.map(async id => await User.findById(id));
-  this.guides = await Promise.all(guidesPromises);
-  next();
-});
-tourSchema.post('save', function(doc, next) {
-  console.log(doc);
-  next();
-});
+// tourSchema.pre('save', async function(next) {
+//   const guidesPromises = this.guides.map(async id => await User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
+
 // Query middleware
 tourSchema.pre(/^find/, function(next) {
   this.startQuery = Date.now();
   this.find({ secretTour: { $ne: true } });
+  next();
+});
+// populate tour guides
+tourSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt'
+  });
+  next();
+});
+tourSchema.post('save', function(doc, next) {
+  console.log(doc);
   next();
 });
 tourSchema.post(/^find/, function(docs, next) {

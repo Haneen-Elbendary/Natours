@@ -129,6 +129,12 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
 });
+// create virtual populate to the reviews
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id'
+});
 // create pre and post middlewares||hooks for save event -> work on .create() & .save()
 tourSchema.pre('save', function(next) {
   this.slug = slugify(this.name);

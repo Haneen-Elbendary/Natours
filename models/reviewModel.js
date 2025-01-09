@@ -40,12 +40,17 @@ const reviewSchema = new mongoose.Schema(
 );
 // populate the reviews
 reviewSchema.pre(/^find/, function(next) {
+  // this.populate({
+  //   path: 'user',
+  //   select: 'name photo'
+  // }).populate({
+  //   path: 'tour',
+  //   select: 'name'
+  // });
+  // No need for tour data on the review it's a lot unwanted data -> user data is enough
   this.populate({
     path: 'user',
     select: 'name photo'
-  }).populate({
-    path: 'tour',
-    select: 'name'
   });
   next();
 });

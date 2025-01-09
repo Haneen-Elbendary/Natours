@@ -134,7 +134,8 @@ exports.getTour = catchAsync(async (req, res, next) => {
   //   }
   // });
   // #################################################NEW VERSION
-  const tour = await Tour.findById(req.params.id);
+  // reviews only wanted when we search for a specific tour not when we get all tours
+  const tour = await Tour.findById(req.params.id).populate('reviews');
   // we need to return next to not sent 2 responses
   if (!tour) {
     return next(new AppError('No tour found with that ID', 404));

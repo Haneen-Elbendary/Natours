@@ -75,6 +75,7 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+// start comment
 userSchema.pre('save', async function(next) {
   // this fuction will be excuted if the password field get modified
   if (!this.isModified('password')) {
@@ -99,6 +100,7 @@ userSchema.pre(/^find/, function(next) {
   this.find({ active: { $ne: false } });
   next();
 });
+// end comment
 // create instanceMethod to make it available for the entire User collection
 userSchema.methods.correctPassword = async (
   candidatePassword,

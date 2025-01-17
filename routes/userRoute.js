@@ -10,20 +10,18 @@ router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
 // recieve resetToken & the newPassword
 router.patch('/resetPassword/:token', authController.resetPassword);
+// all routes after this middleware will be protected
+router.use(authController.protect);
 router.patch(
   '/updateMyPassword',
   //  authController.protect check the token and add the user obj to the req
-  authController.protect,
   authController.updatePassword
 );
-router.patch('/updateMe', authController.protect, userControllers.updateMe);
-router.delete('/deleteMe', authController.protect, userControllers.deleteMe);
-router.get(
-  '/me',
-  authController.protect,
-  userControllers.getMe,
-  userControllers.getUser
-);
+router.patch('/updateMe', userControllers.updateMe);
+router.delete('/deleteMe', userControllers.deleteMe);
+router.get('/me', userControllers.getMe, userControllers.getUser);
+// all routes after this middleware will be allowed to admin only
+router.use(authController.restrictTo('admin'));
 router
   .route('/')
   .get(userControllers.getAllUsers)

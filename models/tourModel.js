@@ -129,6 +129,10 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
 });
+// combined index
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+// single field index
+tourSchema.index({ slug: 1 });
 // create virtual populate to the reviews
 tourSchema.virtual('reviews', {
   ref: 'Review',

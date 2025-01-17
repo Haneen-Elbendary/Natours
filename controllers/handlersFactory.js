@@ -70,6 +70,7 @@ exports.getAll = Model =>
       .limitFeilds()
       .paginate();
     // excude the query
+    // const doc = await featurs.query.explain(); ->explain() ->give us executionStats
     const doc = await featurs.query;
     res.status(200).json({
       status: 'success',

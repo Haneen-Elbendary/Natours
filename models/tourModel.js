@@ -45,7 +45,9 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       default: 4.5,
       min: [1, 'Rating must be above 1.0'],
-      max: [5, 'Rating must be below 5.0']
+      max: [5, 'Rating must be below 5.0'],
+      // round the ratingsAverage
+      set: val => Math.round(val * 10) / 10 //4.66666 -> 46.6666 -> 47 -> 4.7
     },
     ratingsQuantity: { type: Number, default: 0 },
     price: {
@@ -133,6 +135,7 @@ tourSchema.virtual('durationWeeks').get(function() {
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 // single field index
 tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
 // create virtual populate to the reviews
 tourSchema.virtual('reviews', {
   ref: 'Review',
@@ -176,15 +179,15 @@ tourSchema.post(/^find/, function(docs, next) {
   );
   next();
 });
-// aggregation middleware
-tourSchema.pre('aggregate', function(next) {
-  // we will add a stage to the pipeline array before the aggregation is excuted
-  // this -> current aggregation object
-  // we exclude the secretTours from the aggregation
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  // console.log(this.pipeline());
-  next();
-});
+// aggregation middleware -> i commented it bcz it make error for the $geoNear stage that calculate distances for tours from a point
+// tourSchema.pre('aggregate', function(next) {
+//   // we will add a stage to the pipeline array before the aggregation is excuted
+//   // this -> current aggregation object
+//   // we exclude the secretTours from the aggregation
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   // console.log(this.pipeline());
+//   next();
+// });
 // create a model from this schema
 // mode name and model variable must start with an uppercase letter
 const Tour = mongoose.model('Tour', tourSchema);

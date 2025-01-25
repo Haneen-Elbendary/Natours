@@ -30,6 +30,11 @@ router
     authController.restrictTo('admin', 'lead-guide', 'guide'),
     tourControllers.getMonthlyPlan
   );
+// get tours in a specific geospatial area
+router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourControllers.getToursWithin);
+router.route('/distances/:latlng/unit/:unit').get(tourControllers.getDistances);
 router
   .route('/')
   // allow any one to get all tours

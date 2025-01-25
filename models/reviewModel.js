@@ -40,6 +40,8 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
+// prevent duplicate review using indexes
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 // populate the reviews
 reviewSchema.pre(/^find/, function(next) {
   // this.populate({
@@ -69,16 +71,39 @@ reviewSchema.statics.calcAverageRating = async function(tourId) {
       }
     }
   ]);
+  // console.log(stats);
   // save it to the tour
-  await Tour.findByIdAndUpdate(tourId, {
-    ratingsQuantity: stats[0].nRating,
-    ratingsAverage: stats[0].avgRating
-  });
+  if (stats.length > 0) {
+    // update ratingsQuantity && ratingsAverage based on the stats data
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating
+    });
+  } else {
+    // there is no reviews -> there is no stats
+    //reset ratingsQuantity && ratingsAverage to their default value
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5
+    });
+  }
 };
+// calc stats for reviews when creating a new review -> "save" -> doc middleware
 reviewSchema.post('save', function() {
   // this.constructor -> = Review , this -> the current doc
   this.constructor.calcAverageRating(this.tour);
 });
-
+// calc stats for reviews when update/delete a review -> "pre"/"post" for a /^/ -> query middleware
+// findByIdAndUpdate
+// findByIdAndDelet      -> both are query middleware hooks
+reviewSchema.pre(/^findOneAnd/, async function(next) {
+  //this.findOne() -> this here refer to the query findByIdAndUpdate ||  findByIdAndDelete
+  this.r = await this.findOne(); //-> get access to the current document and put it on this
+  //this.r -> we did this to pass the data "the current doc to the post middleware"
+  next();
+});
+reviewSchema.post(/^findOneAnd/, async function() {
+  await this.r.constructor.calcAverageRating(this.r.tour);
+});
 const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;

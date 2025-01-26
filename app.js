@@ -1,5 +1,6 @@
 // core modules
 const express = require('express');
+const path = require('path');
 // my modules
 const app = express();
 const morgan = require('morgan');
@@ -20,10 +21,16 @@ const globalErrorHandler = require('./controllers/globalErrorHandler');
 const tourRouter = require('./routes/toursRoute');
 const UserRouter = require('./routes/userRoute');
 const ReviewRouter = require('./routes/reviewsRoute');
+const viewsRouter = require('./routes/viewsRoute');
 // 3-rd party modules
 // const exp = require('constants');
 // built-in middleware in express to serve static files
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
+// use pug template engine
+app.set('view engine', 'pug');
+// views -> MVC
+app.set('views', path.join(__dirname, 'views'));
 // GLOBAL ->  middlewares
 // 3-rd party middleware from npm
 // secure Express app by setting http response headers
@@ -85,6 +92,7 @@ app.use((req, res, next) => {
 // app.delete('/api/v1/tours/:id', deleteTour);
 
 // use the routers as a middle ware
+app.use('/', viewsRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', UserRouter);
 app.use('/api/v1/reviews', ReviewRouter);

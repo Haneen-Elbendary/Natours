@@ -136,7 +136,7 @@ tourSchema.index({ price: 1, ratingsAverage: -1 });
 // single field index
 tourSchema.index({ slug: 1 });
 tourSchema.index({ startLocation: '2dsphere' });
-// create virtual populate to the reviews
+// create virtual populate to the reviews -> it does not populate the data it just establish the relation between 2 models
 tourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour',

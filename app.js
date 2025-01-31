@@ -22,11 +22,24 @@ const tourRouter = require('./routes/toursRoute');
 const UserRouter = require('./routes/userRoute');
 const ReviewRouter = require('./routes/reviewsRoute');
 const viewsRouter = require('./routes/viewsRoute');
-// 3-rd party modules
-// const exp = require('constants');
-// built-in middleware in express to serve static files
-// app.use(express.static(`${__dirname}/public`));
+
+//we needed to add this headers to the helmet to allow access to the scripts and needed assets that was prevented by CSP && cors
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "script-src 'self' https://api.mapbox.com; " +
+      "style-src 'self' https://api.mapbox.com https://fonts.googleapis.com; " +
+      "font-src 'self' https://fonts.gstatic.com; " +
+      "img-src 'self' data: https://api.mapbox.com; " +
+      "connect-src 'self' https://api.mapbox.com; " +
+      "worker-src 'self' https://api.mapbox.com; " +
+      "frame-src 'self' https://api.mapbox.com;"
+  );
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
+
 // use pug template engine
 app.set('view engine', 'pug');
 // views -> MVC
@@ -34,7 +47,46 @@ app.set('views', path.join(__dirname, 'views'));
 // GLOBAL ->  middlewares
 // 3-rd party middleware from npm
 // secure Express app by setting http response headers
-app.use(helmet());
+//we needed to add this headers to the helmet to allow access to the scripts and needed assets that was prevented by CSP && cors
+// that make the helmet accept some configurations
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          'https://api.mapbox.com',
+          'https://events.mapbox.com',
+          "'unsafe-inline'",
+          "'unsafe-eval'"
+        ],
+        styleSrc: [
+          "'self'",
+          'https://api.mapbox.com',
+          'https://fonts.googleapis.com',
+          "'unsafe-inline'"
+        ],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        imgSrc: ["'self'", 'data:', 'blob:', 'https://api.mapbox.com'],
+        connectSrc: [
+          "'self'",
+          'https://api.mapbox.com',
+          'https://events.mapbox.com',
+          'https://a.tiles.mapbox.com',
+          'https://b.tiles.mapbox.com',
+          'https://c.tiles.mapbox.com',
+          'https://d.tiles.mapbox.com',
+          'blob:',
+          'data:'
+        ],
+        workerSrc: ["'self'", 'blob:', 'data:'],
+        frameSrc: ["'self'", 'https://api.mapbox.com']
+      }
+    }
+  })
+);
+
 // development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

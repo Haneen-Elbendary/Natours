@@ -1,10 +1,37 @@
-exports.getOverview = (req, res) => {
+const Tour = require('./../models/tourModel');
+
+const catchAsync = require('./../utils/catchAsync');
+
+exports.getOverview = catchAsync(async (req, res, next) => {
+  // 1- get the tours data
+  const tours = await Tour.find();
+  // 2- build the template that will hold the data
+  // 3- render that template using tours data from step one
   res.status(200).render('overview', {
-    title: 'All Tours'
+    title: 'All Tours',
+    tours
+  });
+});
+exports.getTour = catchAsync(async (req, res, next) => {
+  // 1- get the data of the tour -> includes reviews & guides
+  const tour = await Tour.findOne({ slug: req.params.slug }).populate({
+    path: 'reviews',
+    select: 'rating user review'
+  });
+  // 2- build the template
+  // 3- fill up the template with the data
+  res.status(200).render('tour', {
+    title: `${tour.name}`,
+    tour
+  });
+});
+exports.getLoginFrom = (req, res) => {
+  res.status(200).render('login', {
+    title: `Log into your account`
   });
 };
-exports.getTour = (req, res) => {
-  res.status(200).render('tour', {
-    title: 'The Forest Hiker'
+exports.getSignupFrom = (req, res) => {
+  res.status(200).render('signup', {
+    title: 'Sign Up'
   });
 };

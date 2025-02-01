@@ -6,6 +6,7 @@ const router = express.Router();
 // a special endpoint for users resource -> don't fit REST philosophy -> it's all about user here
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
+router.get('/logout', authController.logout);
 // recieve user's email only
 router.post('/forgotPassword', authController.forgotPassword);
 // recieve resetToken & the newPassword

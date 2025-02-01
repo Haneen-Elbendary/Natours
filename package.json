@@ -6,12 +6,18 @@
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundler.js",
+    "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundler.js"
   },
   "author": "Haneen Elbendary",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "ax": "^0.2.2",
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "eslint": "^9.13.0",
@@ -39,6 +45,7 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "parcel-bundler": "^1.12.5",
     "prettier": "^1.17.0"
   },
   "engines": {

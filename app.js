@@ -132,7 +132,7 @@ app.use(
 // testing middleware -> ex:helps id we want to see the headers
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 

@@ -19,20 +19,16 @@ const reviewSchema = new mongoose.Schema(
       default: Date.now()
     },
     //   parent referencing -> bcz we may have tons of reviews related to a specific user || a tour
-    user: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: [true, 'Review must belong to a user.']
-      }
-    ],
-    tour: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Tour',
-        required: [true, 'Review must belong to a tour.']
-      }
-    ]
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'Review must belong to a user.']
+    },
+    tour: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Tour',
+      required: [true, 'Review must belong to a tour.']
+    }
   },
   {
     // to ensure that 'virtual fields exist in the output either json || obj -> virtual fields : not exist in the DB but exist in the json || obj  output
@@ -40,7 +36,7 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
-// prevent duplicate review using indexes
+// prevent duplicate review using indexes -> and it works💕
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 // populate the reviews
 reviewSchema.pre(/^find/, function(next) {

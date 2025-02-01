@@ -68,6 +68,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   if (!token) {
     return next(
@@ -95,6 +97,32 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // GRANT ACCESS TO PROTECTED ROUTE!
   req.user = currentUser;
+  next();
+});
+//only for render templates based on if the user logged in or not | no error will be returned here!
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  // 1)check if there's a token & get it if it's exist from the cookies
+  if (req.cookies.jwt) {
+    // 2)verify the token -> check if the payload changed 'token is valid?' -> check if the token is expired
+    // the resolved value of that promise will return decoded data from the payload JWT
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    // 3)check if the user exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    }
+    // 4)check if the user changed the password
+    if (currentUser.passwordChangedAfter(decoded.iat)) {
+      return next();
+    }
+    //There is a user logged in
+    // Any data we pass to req.locals will be accessed by the templates
+    res.locals.user = currentUser;
+    return next();
+  }
   next();
 });
 //restrict actions on deleting tour

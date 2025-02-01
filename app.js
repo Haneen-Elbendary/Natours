@@ -14,6 +14,8 @@ const sanitizeMongo = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const hpp = require('hpp');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const cookieParser = require('cookie-parser');
 // import error class
 const AppError = require('./utils/appError');
 // import the error controller||handler
@@ -27,7 +29,7 @@ const viewsRouter = require('./routes/viewsRoute');
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "script-src 'self' https://api.mapbox.com; " +
+    "script-src 'self' https://api.mapbox.com https://cdnjs.cloudflare.com; " + // Added CDN for Axios
       "style-src 'self' https://api.mapbox.com https://fonts.googleapis.com; " +
       "font-src 'self' https://fonts.gstatic.com; " +
       "img-src 'self' data: https://api.mapbox.com; " +
@@ -58,6 +60,7 @@ app.use(
           "'self'",
           'https://api.mapbox.com',
           'https://events.mapbox.com',
+          'https://cdnjs.cloudflare.com', // Added for Axios CDN
           "'unsafe-inline'",
           "'unsafe-eval'"
         ],
@@ -101,6 +104,8 @@ const limitter = rateLimit({
 app.use('/api', limitter);
 // body parser -> this middleware to parse body data and add it to  the request body
 app.use(express.json({ limit: '10kb' }));
+// cookie parser -> used to parse cookies from the request
+app.use(cookieParser());
 // data sanitization against NOSQL query injection
 app.use(sanitizeMongo());
 // data sanitization against XSS
@@ -127,6 +132,7 @@ app.use(
 // testing middleware -> ex:helps id we want to see the headers
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.cookies);
   next();
 });
 

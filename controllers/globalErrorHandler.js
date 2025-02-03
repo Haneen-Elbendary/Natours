@@ -1,8 +1,5 @@
 const AppError = require('./../utils/appError');
-const cloneError = err => {
-  const descriptors = Object.getOwnPropertyDescriptors(err);
-  return Object.create(Object.getPrototypeOf(err), descriptors);
-};
+
 // handle mongoDB errors
 const handelCastErrorDB = err => {
   const message = `Invalid ${err.path} : ${err.value}.`;
@@ -20,31 +17,60 @@ const handleDuplicateFieldsDB = err => {
   return new AppError(message, 400);
 };
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
-    message: err.message,
-    stack: err.stack
+const sendErrorDev = (err, req, res) => {
+  // A) API -> like request on postman
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(err.statusCode).json({
+      status: err.status,
+      error: err,
+      message: err.message,
+      stack: err.stack
+    });
+  }
+  // B) RENDERED website -> we still in dev mode
+  console.error('ERROR🙀', err);
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: err.message
   });
 };
-const sendErrorProd = (err, res) => {
-  // operational errors , trusted error : send message to the client
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message
-    });
+const sendErrorProd = (err, req, res) => {
+  // A) API
+  if (req.originalUrl.startsWith('/api')) {
+    if (err.isOperational) {
+      // operational errors , trusted error : send message to the client
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message
+      });
+    }
     // programming or unknown error:don't leak details to the client
-  } else {
+
     // 1)Log the error
     console.error('ERROR🙀', err);
     // 2)send generic message
-    res.status(500).json({
+    return res.status(500).json({
       status: 'error',
       message: 'Something went wrong!'
     });
   }
+  //B) RENDERED website
+  if (err.isOperational) {
+    // operational errors , trusted error : send message to the client
+    console.log(err);
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong!',
+      msg: err.message
+    });
+  }
+  // programming or unknown error:don't leak details to the client
+  // 1)Log the error
+  console.error('ERROR🙀', err);
+  // 2)send generic message
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: 'Please try again later!'
+  });
 };
 // handle JWT errors
 const handleJWTError = () =>
@@ -57,9 +83,10 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
-    let error = cloneError(err);
+    let error = { ...err };
+    error.message = err.message;
     // operational errors
     if (error.name === 'CastError') {
       error = handelCastErrorDB(error);
@@ -76,6 +103,6 @@ module.exports = (err, req, res, next) => {
     if (error.name === 'TokenExpiredError') {
       error = handleTokenExpiredError();
     }
-    sendErrorProd(error, res);
+    sendErrorProd(error, req, res);
   }
 };

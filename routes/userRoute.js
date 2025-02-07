@@ -2,11 +2,13 @@ const express = require('express');
 const userControllers = require('./../controllers/userControllers');
 const authController = require('./../controllers/authController');
 
+
 const router = express.Router();
 // a special endpoint for users resource -> don't fit REST philosophy -> it's all about user here
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
+
 // recieve user's email only
 router.post('/forgotPassword', authController.forgotPassword);
 // recieve resetToken & the newPassword
@@ -18,7 +20,12 @@ router.patch(
   //  authController.protect check the token and add the user obj to the req
   authController.updatePassword
 );
-router.patch('/updateMe', userControllers.updateMe);
+router.patch(
+  '/updateMe',
+  userControllers.uploadUserImage,
+  userControllers.resizeUserImage,
+  userControllers.updateMe
+);
 router.delete('/deleteMe', userControllers.deleteMe);
 router.get('/me', userControllers.getMe, userControllers.getUser);
 // all routes after this middleware will be allowed to admin only

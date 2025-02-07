@@ -61,6 +61,10 @@ exports.signup = catchAsync(async (req, res, next) => {
   // create token and pass it to the client  after the user signUp to make auto signIn
   createSendToken(newUser, 201, res);
 });
+// user case for both -> isLoggedIn & protect :
+// Use isLoggedIn when you want to render views and optionally display user-specific content without blocking access.
+// Use protect when you want to restrict access to certain routes and ensure only authenticated users can proceed.
+// protect -> Restrict access to protected routes
 exports.protect = catchAsync(async (req, res, next) => {
   // 1)check if there's a token & get it if it's exist
   let token;
@@ -98,9 +102,11 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // GRANT ACCESS TO PROTECTED ROUTE!
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 //only for render templates based on if the user logged in or not | no error will be returned here!
+// don’t block access if the user isn’t logged in. -> just for rendering and passing user's data to res.locals
 exports.isLoggedIn = async (req, res, next) => {
   // 1)check if there's a token & get it if it's exist from the cookies
   if (req.cookies.jwt) {

@@ -104,6 +104,8 @@ const limitter = rateLimit({
 app.use('/api', limitter);
 // body parser -> this middleware to parse body data and add it to  the request body
 app.use(express.json({ limit: '10kb' }));
+// form body parser -> extended: true allow us to pass more complex data
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 // cookie parser -> used to parse cookies from the request
 app.use(cookieParser());
 // data sanitization against NOSQL query injection

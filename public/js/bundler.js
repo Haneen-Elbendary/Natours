@@ -12861,7 +12861,7 @@ var _mapbox = require("./mapbox");
 
 // DOM element
 var mapBox = document.getElementById('map');
-var loginForm = document.querySelector('.form');
+var loginForm = document.querySelector('.form--login');
 var logoutBtn = document.querySelector('.nav__el--logout');
 // Values
 // Delegation
@@ -12903,7 +12903,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52456" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61072" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

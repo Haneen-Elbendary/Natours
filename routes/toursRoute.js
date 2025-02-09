@@ -3,6 +3,7 @@ const express = require('express');
 const tourControllers = require('./../controllers/toursCotrollers');
 const authController = require('./../controllers/authController');
 const reviewRouter = require('./../routes/reviewsRoute');
+
 const router = express.Router();
 // create  a param middleware ->it's a middleware  that only run for a specific param in the url
 // router.param('id', tourControllers.checkID);
@@ -50,6 +51,8 @@ router
   .patch(
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
+    tourControllers.uploadTourImages,
+    tourControllers.resizeTourImages,
     tourControllers.updateTour
   )
   .delete(

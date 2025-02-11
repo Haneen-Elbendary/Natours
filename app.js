@@ -23,20 +23,22 @@ const globalErrorHandler = require('./controllers/globalErrorHandler');
 const tourRouter = require('./routes/toursRoute');
 const UserRouter = require('./routes/userRoute');
 const ReviewRouter = require('./routes/reviewsRoute');
+const bookingRouter = require('./routes/bookingRoute');
 const viewsRouter = require('./routes/viewsRoute');
 
 //we needed to add this headers to the helmet to allow access to the scripts and needed assets that was prevented by CSP && cors
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "script-src 'self' https://api.mapbox.com https://cdnjs.cloudflare.com; " + // Added CDN for Axios
-      "style-src 'self' https://api.mapbox.com https://fonts.googleapis.com; " +
-      "font-src 'self' https://fonts.gstatic.com; " +
-      "img-src 'self' data: https://api.mapbox.com; " +
-      "connect-src 'self' https://api.mapbox.com; " +
+    "script-src 'self' https://api.mapbox.com https://cdnjs.cloudflare.com https://js.stripe.com; " + // Added Stripe
+    "style-src 'self' https://api.mapbox.com https://fonts.googleapis.com; " +
+    "font-src 'self' https://fonts.gstatic.com; " +
+    "img-src 'self' data: https://api.mapbox.com; " +
+    "connect-src 'self' https://api.mapbox.com https://js.stripe.com; " + // Allow Stripe connections
       "worker-src 'self' https://api.mapbox.com; " +
-      "frame-src 'self' https://api.mapbox.com;"
+      "frame-src 'self' https://api.mapbox.com https://js.stripe.com;" // Allow Stripe iframes
   );
+
   next();
 });
 
@@ -61,6 +63,7 @@ app.use(
           'https://api.mapbox.com',
           'https://events.mapbox.com',
           'https://cdnjs.cloudflare.com', // Added for Axios CDN
+          'https://js.stripe.com', // Added for Stripe
           "'unsafe-inline'",
           "'unsafe-eval'"
         ],
@@ -81,10 +84,11 @@ app.use(
           'https://c.tiles.mapbox.com',
           'https://d.tiles.mapbox.com',
           'blob:',
-          'data:'
+          'data:',
+          'https://js.stripe.com' // Allow Stripe connections
         ],
         workerSrc: ["'self'", 'blob:', 'data:'],
-        frameSrc: ["'self'", 'https://api.mapbox.com']
+        frameSrc: ["'self'", 'https://api.mapbox.com', 'https://js.stripe.com'] // Allow Stripe iframes
       }
     }
   })
@@ -153,6 +157,7 @@ app.use((req, res, next) => {
 
 // use the routers as a middle ware
 app.use('/', viewsRouter);
+app.use('/api/v1/bookings', bookingRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', UserRouter);
 app.use('/api/v1/reviews', ReviewRouter);

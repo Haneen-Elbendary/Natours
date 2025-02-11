@@ -3,6 +3,7 @@ include   _reviewCard
 block append head
     //- meta(http-equiv="Content-Security-Policy" content="script-src 'self' https://api.mapbox.com; script-src-elem 'self' https://api.mapbox.com;")
     script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+    script(src="https://js.stripe.com/v3/")
     link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet')
 
 
@@ -86,4 +87,8 @@ block content
             .cta__content
                 h2.heading-secondary What are you waiting for?
                 p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-                button.btn.btn--green.span-all-rows Book tour now!
+                if user 
+                    // data-tour-id this attribute will give us this variable in js -> tourId -> - will converted to uppercase letter
+                    button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+                else 
+                    a.btn.btn--green.span-all-rows(href="/login") Login to book tour

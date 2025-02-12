@@ -169,16 +169,16 @@ tourSchema.pre(/^find/, function(next) {
   next();
 });
 tourSchema.post('save', function(doc, next) {
-  console.log(doc);
+  // console.log(doc);
   next();
 });
-tourSchema.post(/^find/, function(docs, next) {
-  console.log(
-    `query excution time : ${Date.now() - this.startQuery} Milliseconds`
-    // docs is the resulted docs of the query
-  );
-  next();
-});
+// tourSchema.post(/^find/, function(docs, next) {
+//   console.log(
+//     `query excution time : ${Date.now() - this.startQuery} Milliseconds`
+//     // docs is the resulted docs of the query
+//   );
+//   next();
+// });
 // aggregation middleware -> i commented it bcz it make error for the $geoNear stage that calculate distances for tours from a point
 // tourSchema.pre('aggregate', function(next) {
 //   // we will add a stage to the pipeline array before the aggregation is excuted

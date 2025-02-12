@@ -1,5 +1,6 @@
 // core modules
 const express = require('express');
+const compression = require('compression');
 const path = require('path');
 // my modules
 const app = express();
@@ -130,6 +131,9 @@ app.use(
     ]
   })
 );
+
+// to compress the data that we send to the client -> text/json-> images .jpeg is already compressed
+app.use(compression());
 // create global middlewares -> be careful about middleware order in your code
 // app.use((req, res, next) => {
 //   console.log('hello from the global middleware');

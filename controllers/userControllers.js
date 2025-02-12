@@ -61,8 +61,8 @@ exports.getAllUsers = factory.getAll(User);
 // });
 // the current user delete his account -> he actually just deactivate it
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
+  // console.log(req.file);
+  // console.log(req.body);
   // 1- check if the user sent password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(

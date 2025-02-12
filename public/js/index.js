@@ -1,9 +1,11 @@
 /* eslint-disable */
 import '@babel/polyfill';
 import { login, logout } from './login';
+import { signUp } from './signup';
 import { showMap } from './mapbox';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
+import { showAlert } from './alerts';
 // DOM element
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
@@ -12,6 +14,7 @@ const formUserData = document.querySelector('.form-user-data');
 const formUserPassword = document.querySelector('.form-user-password');
 const btnPassword = document.querySelector('.btn-password');
 const bookBtn = document.getElementById('book-tour');
+const signupForm = document.querySelector('.form--signUp');
 // Values
 // Delegation
 if (mapBox) {
@@ -26,6 +29,25 @@ if (loginForm) {
     login(email, password);
   });
 }
+
+if (signupForm) {
+  signupForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+
+    if (password !== passwordConfirm) {
+      showAlert('error', 'Passwords do not match!');
+      return;
+    }
+
+    signUp(name, email, password, passwordConfirm);
+  });
+}
+
 logoutBtn.addEventListener('click', logout);
 if (formUserData) {
   formUserData.addEventListener('submit', e => {

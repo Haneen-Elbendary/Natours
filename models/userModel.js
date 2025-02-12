@@ -131,7 +131,7 @@ userSchema.methods.createPasswordRestToken = function() {
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
-  console.log({ resetToken }, this.passwordRestToken);
+  // console.log({ resetToken }, this.passwordRestToken);
   // assign value to passwordRestExpire -> 10 mins before expiration
   this.passwordRestExpires = Date.now() + 10 * 60 * 1000;
 

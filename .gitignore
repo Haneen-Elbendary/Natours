@@ -5,6 +5,3 @@ node_modules/
 # Environment variables
 config.env
 
-
-# Ignore local package-lock.json if not required
-package-lock.json

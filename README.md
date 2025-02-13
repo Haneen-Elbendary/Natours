@@ -1,4 +1,6 @@
-![127 0 0 1_3000_login](https://github.com/user-attachments/assets/e1da6183-642d-4941-84f7-2a6ff6098faa)
+
+![127 0 0 1_3000_](https://github.com/user-attachments/assets/bdcfd139-a063-4f67-82ed-f74941282cda)
+
 ---
 
 # **Natours API**
@@ -31,18 +33,8 @@ Here's how you can structure and enhance the **Screenshots** section in your REA
 ---
 
 ## 📸 Screenshots
-
-### **Overview Page**
-
-![homeWithoutLogin](https://github.com/user-attachments/assets/f81e48e9-191f-466a-8c98-33bb0503b670)
-
-The homepage of the Natours website, showcasing featured tours, navigation, and a clean, user-friendly interface.
-
----
-
 ### **Login Page**
-
-![127 0 0 1_3000_login](https://github.com/user-attachments/assets/18b3efc5-8f51-4d4b-a86d-415d02008de6)
+![127 0 0 1_3000_login](https://github.com/user-attachments/assets/20d3aa2e-3bea-46fe-ba90-d095521385d4)
 
 The login page where users can securely authenticate with their credentials to access their account.
 
@@ -50,7 +42,8 @@ The login page where users can securely authenticate with their credentials to a
 
 ### **Signup Page**
 
-![127 0 0 1_3000_signup (2)](https://github.com/user-attachments/assets/fb320b70-6431-41eb-847c-0a283978b20f)
+![127 0 0 1_3000_signup](https://github.com/user-attachments/assets/74008c25-3658-47b5-8266-59a961070760)
+
 
 The signup page that allows users to create a new account by providing necessary information like email, username, and password.
 
@@ -58,7 +51,7 @@ The signup page that allows users to create a new account by providing necessary
 
 ### **Me: User Info**
 
-![127 0 0 1_3000_me](https://github.com/user-attachments/assets/46cc84f6-9dfb-41ca-b6ad-852ad6bde6e9)
+![127 0 0 1_3000_me](https://github.com/user-attachments/assets/ce3b7750-9344-409a-9f52-b40aa3a71e2b)
 
 The user profile page, where users can view and update their personal details, such as name, email, and profile picture.
 
@@ -66,6 +59,7 @@ The user profile page, where users can view and update their personal details, s
 
 ### **Tour Details Page**
 
+![127 0 0 1_3000_tour_The-Forest-Hiker](https://github.com/user-attachments/assets/ae84d510-183b-412e-afac-dc6f28c5b76c)
 
 Detailed view of a specific tour, including descriptions, images, and other important information to help users make an informed decision.
 
@@ -73,15 +67,16 @@ Detailed view of a specific tour, including descriptions, images, and other impo
 
 ### **Checkout Page**
 
-![checkout stripe com_c_pay_cs_test_a15BIuXXEgzh3Eu935AYkXpRG4XmX6CGCIp0IRDBETKCFHsdTNSDmbDERu](https://github.com/user-attachments/assets/d14fad80-0e05-4294-9cf6-753d63a5d71e)
+![checkout stripe com_c_pay_cs_test_a16D14ZtFDjKajWEun5wsu5KgvpeDIVBmu5Ff1BC1xftFmppYFaUQpMte4](https://github.com/user-attachments/assets/bad7c4f4-fc7d-4733-b01a-8c1cd968a0ad)
 
 The secure checkout page where users can finalize their booking by providing payment details and reviewing their selections.
 
 ---
 
 ### **My Booked Tours**
-![127 0 0 1_3000_my-tours](https://github.com/user-attachments/assets/f3ab8065-fb3b-43bb-bc90-ee6a56ba3b64)
 
+
+![127 0 0 1_3000_my-tours](https://github.com/user-attachments/assets/6dd15330-e20d-4cd0-861f-98e7efa7f16e)
 
 A dedicated page for users to see their past and upcoming tours, with options to view details or cancel bookings.
 
@@ -130,7 +125,9 @@ A dedicated page for users to see their past and upcoming tours, with options to
    npm run dev
    ```
 
-5. The API will be available at `http://localhost:3000`
+5. The API documentation is available at [Postman Documentation](https://documenter.getpostman.com/view/37206250/2sAYQgfngE)
+
+Now, it directs users to your Postman API documentation link! Let me know if you'd like to make further adjustments.
 
 ## 📌 **API Endpoints**
 

@@ -1,4 +1,4 @@
-
+![127 0 0 1_3000_login](https://github.com/user-attachments/assets/e1da6183-642d-4941-84f7-2a6ff6098faa)
 ---
 
 # **Natours API**
@@ -26,6 +26,67 @@ A highly scalable and secure RESTful API for a tour booking platform, built with
 - **Payment Processing:** Stripe API
 - **Views:** Pug template engine
 - **Deployment:** Environment variables management with `dotenv`
+Here's how you can structure and enhance the **Screenshots** section in your README file to make it look polished and professional. You can include the full-size screenshots you took for the different pages and describe each of them:
+
+---
+
+## 📸 Screenshots
+
+### **Overview Page**
+
+![homeWithoutLogin](https://github.com/user-attachments/assets/f81e48e9-191f-466a-8c98-33bb0503b670)
+
+The homepage of the Natours website, showcasing featured tours, navigation, and a clean, user-friendly interface.
+
+---
+
+### **Login Page**
+
+![127 0 0 1_3000_login](https://github.com/user-attachments/assets/18b3efc5-8f51-4d4b-a86d-415d02008de6)
+
+The login page where users can securely authenticate with their credentials to access their account.
+
+---
+
+### **Signup Page**
+
+![127 0 0 1_3000_signup (2)](https://github.com/user-attachments/assets/fb320b70-6431-41eb-847c-0a283978b20f)
+
+The signup page that allows users to create a new account by providing necessary information like email, username, and password.
+
+---
+
+### **Me: User Info**
+
+![127 0 0 1_3000_me](https://github.com/user-attachments/assets/46cc84f6-9dfb-41ca-b6ad-852ad6bde6e9)
+
+The user profile page, where users can view and update their personal details, such as name, email, and profile picture.
+
+---
+
+### **Tour Details Page**
+
+
+Detailed view of a specific tour, including descriptions, images, and other important information to help users make an informed decision.
+
+---
+
+### **Checkout Page**
+
+![checkout stripe com_c_pay_cs_test_a15BIuXXEgzh3Eu935AYkXpRG4XmX6CGCIp0IRDBETKCFHsdTNSDmbDERu](https://github.com/user-attachments/assets/d14fad80-0e05-4294-9cf6-753d63a5d71e)
+
+The secure checkout page where users can finalize their booking by providing payment details and reviewing their selections.
+
+---
+
+### **My Booked Tours**
+![127 0 0 1_3000_my-tours](https://github.com/user-attachments/assets/f3ab8065-fb3b-43bb-bc90-ee6a56ba3b64)
+
+
+A dedicated page for users to see their past and upcoming tours, with options to view details or cancel bookings.
+
+---
+
 
 ## 📂 **Project Structure**
 

@@ -3,7 +3,7 @@
 
 ---
 
-# **Natours API**
+# **Natours**
 
 A highly scalable and secure RESTful API for a tour booking platform, built with **Node.js**, **Express.js**, and **MongoDB**. This project follows the **MVC** architecture and includes authentication, authorization, secure data handling, and **Stripe** integration for payments.
 

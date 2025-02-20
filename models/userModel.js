@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const { type } = require('os');
+// const { type } = require('os');
 const userSchema = new mongoose.Schema(
   {
     name: {

@@ -5,4 +5,4 @@ node_modules/
 # Environment variables
 config.env
 
-Natours-record.mp4
+*.mp4

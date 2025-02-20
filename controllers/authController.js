@@ -77,9 +77,13 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 exports.verifyEmail = catchAsync(async (req, res, next) => {
   const { email, verificationCode } = req.body;
+  const hashedCode = crypto
+    .createHash('sha256')
+    .update(verificationCode)
+    .digest('hex');
   const user = await User.findOne({
     email,
-    verificationCode,
+    verificationCode: hashedCode,
     verificationCodeExpires: {
       $gt: Date.now()
     }

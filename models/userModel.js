@@ -113,7 +113,11 @@ userSchema.pre(/^find/, function(next) {
 //Generate 6-digits verification code
 userSchema.methods.createVerificationCode = function() {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
-  this.verificationCode = code;
+  const hashedCode = crypto
+    .createHash('sha256')
+    .update(code)
+    .digest('hex');
+  this.verificationCode = hashedCode;
   this.verificationCodeExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
   return code;
 };

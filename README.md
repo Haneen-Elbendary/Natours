@@ -203,11 +203,10 @@ To add a section about future improvements and features, you can include somethi
 
 ---
 
-
 ### 🚀 Future Improvements  
 This project is continuously evolving, and I plan to enhance its functionality with several new features, including:  
 
-- **Sign-Up Form**: I will implement a sign-up form similar to the login form.  
+✅ **Sign-Up Form with Email Verification**: **Completed** – I have successfully implemented a sign-up form, similar to the login form, with full email verification on both the front end and back end.  
 - **Tour Reviews**: On the tour detail page, users who have taken a tour will be able to add a review directly on the website via a dedicated form.  
 - **Booking Restrictions**: The booking section on the tour detail page will be hidden if the current user has already booked the tour, preventing duplicate bookings at the model level.  
 - **Like & Favorite Tours**: I will add a "like tour" functionality, allowing users to save their favorite tours to a dedicated page.  
@@ -215,7 +214,6 @@ This project is continuously evolving, and I plan to enhance its functionality w
 - **Admin Management**: I will create full "Manage" pages for administrators to **CRUD** (Create, Read, Update, Delete) tours, users, reviews, and bookings.  
 
 Stay tuned for these exciting updates! 🚀
----
 
 ## 🚀 **Deployment**
 

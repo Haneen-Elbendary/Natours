@@ -55,6 +55,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
       select: false
+    },
+    verificationCode: String,
+    verificationCodeExpires: Date,
+    isVerified: {
+      type: Boolean,
+      default: false
     }
     // {
     //   type: Date,
@@ -104,6 +110,13 @@ userSchema.pre(/^find/, function(next) {
   next();
 });
 // end comment
+//Generate 6-digits verification code
+userSchema.methods.createVerificationCode = function() {
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  this.verificationCode = code;
+  this.verificationCodeExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+  return code;
+};
 // create instanceMethod to make it available for the entire User collection
 userSchema.methods.correctPassword = async (
   candidatePassword,

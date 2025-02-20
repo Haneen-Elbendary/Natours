@@ -59,10 +59,10 @@ module.exports = class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
-  async sendWelcome() {
-    await this.send('welcome', 'Welcoming Message!😘');
+  async sendWelcomeWithVerifyCode() {
+    await this.send('welcome', 'Welcome, verify your signup now!😘');
   }
-
+  
   async sendPasswordRest() {
     await this.send(
       'passwordReset',

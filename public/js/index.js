@@ -2,6 +2,7 @@
 import '@babel/polyfill';
 import { login, logout } from './login';
 import { signUp } from './signup';
+import { verifyEmail } from './verifyEmail';
 import { showMap } from './mapbox';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
@@ -15,6 +16,7 @@ const formUserPassword = document.querySelector('.form-user-password');
 const btnPassword = document.querySelector('.btn-password');
 const bookBtn = document.getElementById('book-tour');
 const signupForm = document.querySelector('.form--signUp');
+const verifyForm = document.querySelector('.form--verify');
 // Values
 // Delegation
 if (mapBox) {
@@ -47,7 +49,14 @@ if (signupForm) {
     signUp(name, email, password, passwordConfirm);
   });
 }
-
+if (verifyForm) {
+  verifyForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const verificationCode = document.getElementById('verificationCode').value;
+    const emailVerify = document.getElementById('email-verify').value;
+    verifyEmail(emailVerify, verificationCode);
+  });
+}
 logoutBtn.addEventListener('click', logout);
 if (formUserData) {
   formUserData.addEventListener('submit', e => {

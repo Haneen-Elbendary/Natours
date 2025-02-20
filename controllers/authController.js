@@ -33,12 +33,14 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, isVerified } = req.body;
   // console.log(email, password);
   // 1) check if email && password exist
   if (!email || !password) {
     return next(new AppError('Please provide email and password', 400)); //400 -> bad request
   }
+  if (isVerified === false)
+    return next(new AppError('Please verify your Email', 401)); //400 -> unauthorized
   // 2) check the user exist && password
   // it's a query so we need to await it
   const user = await User.findOne({ email }).select('+password');
@@ -59,10 +61,40 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordChangedAt: req.body.passwordChangedAt,
     role: req.body.role
   });
-  const url = `${req.protocol}://${req.get('host')}/me`;
-  await new Email(newUser, url).sendWelcome();
+  // Generate verification code
+  const verificationCode = newUser.createVerificationCode();
+  await newUser.save({ validateBeforeSave: false });
+
+  // const url = `${req.protocol}://${req.get('host')}/me`;
+
+  await new Email(newUser, verificationCode).sendWelcomeWithVerifyCode();
   // create token and pass it to the client  after the user signUp to make auto signIn
-  createSendToken(newUser, 201, res);
+  // createSendToken(newUser, 201, res);
+  res.status(201).json({
+    status: 'success',
+    message: 'Verification code sent! Please check your email.'
+  });
+});
+exports.verifyEmail = catchAsync(async (req, res, next) => {
+  const { email, verificationCode } = req.body;
+  const user = await User.findOne({
+    email,
+    verificationCode,
+    verificationCodeExpires: {
+      $gt: Date.now()
+    }
+  });
+  if (!user) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Invalid or expired verification code'
+    });
+  }
+  user.isVerified = true;
+  user.verificationCode = undefined;
+  user.verificationCodeExpire = undefined;
+  await user.save({ validateBeforeSave: false });
+  createSendToken(user, 200, res);
 });
 // user case for both -> isLoggedIn & protect :
 // Use isLoggedIn when you want to render views and optionally display user-specific content without blocking access.

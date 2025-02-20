@@ -30,5 +30,5 @@ router.get(
   authControllers.isLoggedIn,
   viewsControllers.getSignupFrom
 );
-
+router.get('/verify-email-code', viewsControllers.getVerifyCodeInput);
 module.exports = router;

@@ -18,7 +18,7 @@ export const signUp = async (name, email, password, passwordConfirm) => {
     if (result.data.status === 'success') {
       showAlert('success', 'Signed Up Successfully!');
       window.setTimeout(() => {
-        location.assign('/'); // Redirect after successful signup
+        location.assign('/verify-email-code'); // Redirect after successful signup
       }, 1500);
     }
   } catch (err) {

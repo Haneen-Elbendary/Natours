@@ -2,10 +2,10 @@ const express = require('express');
 const userControllers = require('./../controllers/userControllers');
 const authController = require('./../controllers/authController');
 
-
 const router = express.Router();
 // a special endpoint for users resource -> don't fit REST philosophy -> it's all about user here
 router.post('/signup', authController.signup);
+router.post('/verify-email', authController.verifyEmail);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 

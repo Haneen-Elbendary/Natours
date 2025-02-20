@@ -1,0 +1,30 @@
+extends base
+block content
+    main.main
+        .verify-form
+            h2.heading-secondary.ma-bt-lg Email Verification
+        
+            form.form.form--verify
+                .form__group
+                    label.form__label(for='email') Email Address
+                    input#email-verify.form__input(
+                        type='email', 
+                        placeholder='you@example.com', 
+                        required, 
+                        style="width: 50%;"
+                    )
+
+                .form__group
+                    label.form__label(for='verificationCode') Verification Code
+                    input#verificationCode.form__input(
+                        type='text', 
+                        placeholder='Enter Code', 
+                        required, 
+                        minlength='6', 
+                        maxlength='6', 
+                        pattern='[0-9]{6}', 
+                        style="width: 50%;"
+                    )
+
+                .form__group
+                    button#verify.btn.btn--green(type='submit') Verify

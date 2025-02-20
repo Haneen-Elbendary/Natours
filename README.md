@@ -56,6 +56,15 @@ The signup page that allows users to create a new account by providing necessary
 The Verify Email page, where users confirm their email address by entering the verification code sent to their inbox.
 
 ---
+### Email Page  
+
+![Email](https://github.com/user-attachments/assets/0ec8139d-8137-45e9-aab8-68a63b23190b)
+
+
+The Email page, where users receive important account-related emails, such as verification codes and password reset links.  
+
+
+---
 
 ### **Me: User Info**
 

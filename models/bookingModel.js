@@ -35,5 +35,7 @@ bookingSchema.pre(/^find/, function(next) {
   });
   next();
 });
+//Create a unique index to prevent duplicate bookings
+bookingSchema.index({ tour: 1, user: 1 }, { unique: true });
 const Booking = mongoose.model('Booking', bookingSchema);
 module.exports = Booking;

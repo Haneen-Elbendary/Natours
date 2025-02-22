@@ -6,6 +6,7 @@ import { verifyEmail } from './verifyEmail';
 import { showMap } from './mapbox';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
+import { createReview } from './createReview';
 import { showAlert } from './alerts';
 // DOM element
 const mapBox = document.getElementById('map');
@@ -17,6 +18,8 @@ const btnPassword = document.querySelector('.btn-password');
 const bookBtn = document.getElementById('book-tour');
 const signupForm = document.querySelector('.form--signUp');
 const verifyForm = document.querySelector('.form--verify');
+const reviewForm = document.querySelector('.review-form');
+const submitReviewBtn = document.querySelector('#submitReview');
 // Values
 // Delegation
 if (mapBox) {
@@ -57,6 +60,23 @@ if (verifyForm) {
     verifyEmail(emailVerify, verificationCode);
   });
 }
+
+if (reviewForm) {
+  reviewForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const rating = document.querySelector('#rating').value;
+    const review = document.querySelector('#review').value;
+    const user = submitReviewBtn.dataset.user;
+    const tour = submitReviewBtn.dataset.tour;
+    // Validate inputs
+    if (!rating || !review) {
+      showAlert('error', 'Please fill in all fields');
+      return;
+    }
+    await createReview(review, rating, user, tour);
+  });
+}
+
 logoutBtn.addEventListener('click', logout);
 if (formUserData) {
   formUserData.addEventListener('submit', e => {

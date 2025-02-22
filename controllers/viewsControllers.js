@@ -15,24 +15,36 @@ exports.getOverview = catchAsync(async (req, res, next) => {
   });
 });
 exports.getTour = catchAsync(async (req, res, next) => {
-  // 1- get the data of the tour -> includes reviews & guides
-  const tour = await Tour.findOne({
-    slug: req.params.slug
-  }).populate({
+  // 1- Get the tour data, including reviews & guides
+  const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
-    fields: 'rating user review'
+    select: 'rating user review'
   });
-  // this if statement made it operational error based on appError class that specified this.isOperational = true;!
+
+  // 2- If no tour is found, return an error
   if (!tour) {
     return next(new AppError('There is no tour with that name', 404));
   }
-  // 2- build the template
-  // 3- fill up the template with the data
+
+  // 3- Check if the user has booked this tour
+  let userHasBooked = false;
+  if (req.user) {
+    const booking = await Booking.findOne({ user: req.user.id, tour: tour.id });
+    userHasBooked = !!booking;
+  } else {
+    userHasBooked = false;
+  }
+
+  res.locals.tour = tour;
+
+  // 4- Render the tour template with the required data
   res.status(200).render('tour', {
     title: `${tour.name}`,
-    tour
+    tour,
+    userHasBooked
   });
 });
+
 exports.getLoginFrom = (req, res) => {
   res.status(200).render('login', {
     title: `Log into your account`

@@ -1,11 +1,9 @@
 extends base 
 include   _reviewCard
 block append head
-    //- meta(http-equiv="Content-Security-Policy" content="script-src 'self' https://api.mapbox.com; script-src-elem 'self' https://api.mapbox.com;")
     script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
     script(src="https://js.stripe.com/v3/")
     link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet')
-
 
 mixin overviewBox(icon,label,text)
     .overview-box__detail
@@ -13,6 +11,7 @@ mixin overviewBox(icon,label,text)
             use(xlink:href=`/img/icons.svg#icon-${icon}`)
         span.overview-box__label= label
         span.overview-box__text= text
+
 block content
     section.section-header
         .header__hero
@@ -43,8 +42,6 @@ block content
                     +overviewBox("user","Participants",`${tour.maxGroupSize} people`)
                     +overviewBox("star","Rating",`${tour.ratingsAverage} / 5`)
 
-
-
                 .overview-box__group
                     h2.heading-secondary.ma-bt-lg Your tour guides
                     each guide in tour.guides
@@ -56,13 +53,11 @@ block content
                                 span.overview-box__label Guide
                             span.overview-box__text= guide.name
 
-
         .description-box
             h2.heading-secondary.ma-bt-lg= `About ${tour.name}` 
-            - const paragraphs = tour.description.split("\n");
+            - const paragraphs = tour.description.split("\n")
             each p in paragraphs
                 p.description__text= p
-
 
     section.section-pictures
         each img,i in tour.images
@@ -77,6 +72,32 @@ block content
             each review in tour.reviews
                 +reviewCard(review)
 
+        // 📌 Add Review Form - Only if the User Has Booked the Tour
+        if userHasBooked
+            .review-form(style="width: 50%; margin: 0 auto; padding: 50px 0;")
+                h2.heading-secondary.ma-bt-lg(style="color: #55c57a; text-align: center; font-size: 2.2rem; font-weight: bold;") Add Your Review
+                form.form.form--review(method='POST' action='/api/v1/reviews' 
+                    style="display: flex; flex-direction: column; gap: 20px; background: white; padding: 35px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);")
+                    .form__group
+                        label.form__label(for='rating' style="color: #55c57a; font-weight: bold; font-size: 1.3rem;") Rating
+                        select#rating.form__input(name='rating' required 
+                            style="padding: 12px; border-radius: 5px; font-size: 1.2rem; background: #f7f7f7; color: #55c57a; border: 1px solid #55c57a;")
+                            option(value='5') ⭐⭐⭐⭐⭐ - Excellent
+                            option(value='4') ⭐⭐⭐⭐ - Very Good
+                            option(value='3') ⭐⭐⭐ - Good
+                            option(value='2') ⭐⭐ - Fair
+                            option(value='1') ⭐ - Poor
+                    .form__group
+                        label.form__label(for='review' style="color: #55c57a; font-weight: bold; font-size: 1.3rem;") Your Review
+                        textarea#review.form__input(name='review' placeholder='Write your experience...' required 
+                            style="padding: 15px; border-radius: 5px; min-height: 140px; font-size: 1.2rem; background: #f7f7f7; color: #55c57a; border: 1px solid #55c57a;")
+                    .form__group(style="display: flex; justify-content: center;")
+                        input(type='hidden' name='tour' value=tour.id)
+                        button#submitReview.btn.btn--green(type='submit' 
+                            style="border: 2px solid #55c57a; padding: 14px 30px; border-radius: 8px; color: #55c57a; background: white; font-weight: bold; font-size: 1.4rem; box-shadow: 0px 4px 12px rgba(85, 197, 122, 0.3); transition: all 0.3s ease; cursor: pointer;"
+                            onmouseover="this.style.backgroundColor='#55c57a'; this.style.color='white';" 
+                            onmouseout="this.style.backgroundColor='white'; this.style.color='#55c57a';" data-user=user._id  data-tour=tour._id) Submit Review
+
 
     section.section-cta
         .cta
@@ -88,7 +109,6 @@ block content
                 h2.heading-secondary What are you waiting for?
                 p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
                 if user 
-                    // data-tour-id this attribute will give us this variable in js -> tourId -> - will converted to uppercase letter
                     button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
                 else 
                     a.btn.btn--green.span-all-rows(href="/login") Login to book tour

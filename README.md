@@ -82,6 +82,13 @@ Detailed view of a specific tour, including descriptions, images, and other impo
 
 ---
 
+### **Add Review Page**  
+
+![reviewForm](https://github.com/user-attachments/assets/47a0e45c-2e2e-48ce-a14d-4a6ae3cd9cb1)
+
+The Add Review page, where users can submit their feedback and rate tours based on their experience. 
+
+---
 ### **Checkout Page**
 
 ![checkout stripe com_c_pay_cs_test_a16D14ZtFDjKajWEun5wsu5KgvpeDIVBmu5Ff1BC1xftFmppYFaUQpMte4](https://github.com/user-attachments/assets/bad7c4f4-fc7d-4733-b01a-8c1cd968a0ad)
@@ -203,18 +210,6 @@ To add a section about future improvements and features, you can include somethi
 
 ---
 
-### 🚀 Future Improvements  
-This project is continuously evolving, and I plan to enhance its functionality with several new features, including:  
-
-✅ **Sign-Up Form with Email Verification**: **Completed** – I have successfully implemented a sign-up form, similar to the login form, with full email verification on both the front end and back end.  
-- **Tour Reviews**: On the tour detail page, users who have taken a tour will be able to add a review directly on the website via a dedicated form.  
-- **Booking Restrictions**: The booking section on the tour detail page will be hidden if the current user has already booked the tour, preventing duplicate bookings at the model level.  
-- **Like & Favorite Tours**: I will add a "like tour" functionality, allowing users to save their favorite tours to a dedicated page.  
-- **My Reviews Page**: On the user account page, I will implement a "My Reviews" section where users can view and edit their submitted reviews.  
-- **Admin Management**: I will create full "Manage" pages for administrators to **CRUD** (Create, Read, Update, Delete) tours, users, reviews, and bookings.  
-
-Stay tuned for these exciting updates! 🚀
-
 ## 🚀 **Deployment**
 
 ### **Deploy to Production**
@@ -238,6 +233,7 @@ Contributions are welcome! If you’d like to improve this project, please fork 
 © 2025 Haneen Elbendary. All rights reserved.
 
 ---
+**Note:** The back-end of this project is fully featured, including authentication, authorization, booking, reviews, and more. However, the front-end implementation covers only the main features and is not a complete production-ready UI.
 
 ---
 
